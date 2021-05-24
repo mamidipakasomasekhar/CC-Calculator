@@ -26,8 +26,8 @@ body {
   background-color: #099;
   color: #000;
   text-align: right;
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 button {
