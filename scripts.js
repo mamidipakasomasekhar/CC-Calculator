@@ -1,28 +1,107 @@
-const buttons = document.querySelectorAll('button');
-// select the .display element
-const display = document.querySelector('.display');
+const display1 = document.querySelector('.display-1');
+const display2 = document.querySelector('.display-2');
+const clearAll = document.querySelector('.all-clear');
+const clearlast = document.querySelector('.last-entity-clear');
+const tempResult = document.querySelector('.temp-result');
+const numbers = document.querySelectorAll('.number');
+const operation = document.querySelectorAll('.operation');
+const equal = document.querySelector('.equal');
 
-// add eventListener to each button
-buttons.forEach(function(button) {
-  button.addEventListener('click', calculate);
+var num1 = '';
+var num2 = '';
+let result = null;
+let lastOperation = '';
+let haveDot = false;
+
+numbers.forEach( number => {
+    number.addEventListener('click',(e)=>{
+   if(e.target.innerText == '.' && !haveDot ){
+    haveDot = true;
+
+   } else if (e.target.innerText == '.' && haveDot){
+   return;
+
+   }
+   num2 += e.target.innerText;
+   display2.innerText = num2;
+
+    })
+
+    
 });
 
-// calculate function
-function calculate(event) {
-  // current clicked buttons value(i.e if we click on 8 event.target.value will trigger that value)
-  const clickedButtonValue = event.target.value;
+operation.forEach(operation => {
+ operation.addEventListener('click',(e)=> {
+ if(!num2) return;
+ haveDot =false;
+ const operationName = e.target.innerText; 
+ if(num1 && num2 && lastOperation){
+ mathOperation();
 
-  if (clickedButtonValue === '=') {
-    // check if the display is not empty then only do the calculation
-    if (display.value !== '') {
-      // calculate and show the answer to display
-      display.value = eval(display.value);
+
+ }
+ else{
+     result = parseFloat(num2);
     }
-  } else if (clickedButtonValue === 'C') {
-    // clear everything on display
-    display.value = '';
-  } else {
-    // otherwise concatenate it to the display
-    display.value += clickedButtonValue;
-  }
+    clearVar(operationName);
+    lastOperation = operationName;
+
+ })
+})
+
+function clearVar( name = " "){
+ num1 += num2+" "+name + " ";
+ display1.innerText = num1;
+ display2.innerText = ' ';
+ num2 ='';
+ tempResult.innerText = result;
 }
+
+function mathOperation(){
+ if(lastOperation ==='x'){
+
+    result = parseFloat(result) *  parseFloat(num2);
+ }
+ else if ( lastOperation ==='+'){
+     result = parseFloat(result) + parseFloat(num2); 
+ }
+ else if ( lastOperation ==='-'){
+    result = parseFloat(result) - parseFloat(num2); 
+}
+else if ( lastOperation ==='/'){
+    result = parseFloat(result) / parseFloat(num2); 
+}
+else if ( lastOperation ==='%'){
+    result = parseFloat(result) % parseFloat(num2); 
+}
+else if( lastOperation ==='**'){
+    result = parseFloat(result) ** parseFloat(num2);
+}
+}
+
+equal.addEventListener('click',(e) => {
+
+if(!num1 ||  !num2) return;
+haveDot = false;
+mathOperation();
+clearVar();
+display2.innerText =  result;
+tempResult.innerText = '';
+num2 = '';
+
+})
+
+clearAll.addEventListener('click',(e) => {
+ display1.innerText = '0';
+ display2.innerText = '0';
+ num1 = '';
+ num2 = '';
+ result = '';
+
+})
+
+clearlast.addEventListener('click', (e) => {
+
+    display2.innerText = '';
+    num2 = '';
+})
